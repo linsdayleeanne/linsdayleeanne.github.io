@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>手机尾号评分</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style id="dynamicStyles"></style> <!-- 用于动态插入 CSS -->
+</head>
+
+<body>
+    <div class="container" id="mainContainer">
+        <h1 id="pageTitle">寻找满分手机尾号(免费参与)</h1>
+        <div class="input-group" id="inputGroup">
+            <label id="inputLabel" for="phoneTail">输入手机尾号（后四位）:</label>
+            <input type="text" id="phoneTail" maxlength="4" placeholder="例如: 1234">
+            <div id="errorDisplay" class="hidden" style="color: red; margin-top: 10px;"></div> <!-- 错误提示区域 -->
+        </div>
+        <button id="scoreButton">评分</button>
+        <div id="result" class="result hidden">
+            <div id="phoneTailDisplay">尾 号：</div>
+            <div id="scoreDisplay" class="highlight-score">评 分：</div>
+            <div id="levelDisplay">幸运指数：</div>
+            <div id="priceDisplay" class="loading">估价查询中...</div>
+            <div id="messageDisplay" class="highlight-score">建议：</div>
+            <div id="suggestionDisplay" class="highlight-score"></div> <!-- 新添加的建议显示区域 -->
+            <div class="separator"></div>
+            <div class="scroll-text">
+                <span id="scrollTextDisplay">加载字幕</span>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/tts.js"></script>
+    <script src="js/base.js"></script>
+    <script src="js/price.js"></script>
+    <script src="js/score.js"></script>
+    <script>
+        // 动态加载JSON配置中的文本、占位符和样式
+        function loadConfig() {
+            fetch('/data/price_config.json')
+                .then(response => response.json())
+                .then(data => {
+                    // 设置滚动字幕
+                    const scrollText = data.scrollText || '暂无滚动字幕';
+                    document.getElementById('scrollTextDisplay').innerText = scrollText;
+                })
+                .catch(error => {
+                    console.error('加载 JSON 配置文件时发生错误:', error);
+                    document.getElementById('scrollTextDisplay').innerText = '无法加载字幕内容';
+                });
+        }
+
+        // 初次加载配置
+        loadConfig();
+    </script>
+</body>
+
+</html>
